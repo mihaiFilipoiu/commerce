@@ -14,12 +14,17 @@ class Category(models.Model):
 
 class AuctionListing(models.Model):
     id = models.BigAutoField(primary_key=True)
+    auctioneer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings", default=1)
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=255)
     starting_bid = models.IntegerField()
     date_created = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="auctions")
 
+    def __str__(self):
+        return f"\"{self.title}\" by {self.auctioneer}"
+    
+    
 class Bid(models.Model):
     id = models.BigAutoField(primary_key=True)
     bid = models.IntegerField()
