@@ -9,6 +9,9 @@ class Category(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=64)
 
+    def __str__(self):
+        return self.name
+
 class AuctionListing(models.Model):
     id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=64)
