@@ -3,5 +3,13 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    <div>
+        {% for auction in auctions %}
+            <div class="auction">
+                <p>{{ auction.title }}</p>
+                <p>Price: ${{ auction.starting_bid }}</p>
+                <p>Created {{ auction.date_created }}</p>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
