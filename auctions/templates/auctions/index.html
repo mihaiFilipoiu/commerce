@@ -5,11 +5,13 @@
 
     <div>
         {% for auction in auctions %}
-            <div class="auction">
-                <p>{{ auction.title }}</p>
-                <p>Price: ${{ auction.starting_bid }}</p>
-                <p>Created {{ auction.date_created }}</p>
-            </div>
+            <a href="{{ auction.id }}" class="auction-link">
+                <div class="auction">
+                    <p>{{ auction.title }}</p>
+                    <p>Price: ${{ auction.starting_bid }}</p>
+                    <p>Created {{ auction.date_created }}</p>
+                </div>
+            </a>
         {% endfor %}
     </div>
 {% endblock %}

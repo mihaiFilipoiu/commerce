@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
@@ -9,7 +9,7 @@ from .models import User, AuctionListing
 from .forms import CreateListingForm
 
 def index(request):
-    auctions = AuctionListing.objects.all()
+    auctions = AuctionListing.objects.order_by("-date_created")
     return render(request, "auctions/index.html", {
         "auctions": auctions
     })
@@ -79,5 +79,12 @@ def create_listing(request):
             "form": CreateListingForm
         })
 
-
+def listing_view(request, auction_id):
+    if request.method == "POST": # POST
+        pass
+    else: # GET
+        auction = AuctionListing.objects.get(pk=auction_id)
+        return render(request, "auctions/listing_page.html", {
+            "auction": auction
+        })
 

@@ -7,3 +7,8 @@ body {
     padding: 10px; 
     margin-bottom: 10px;
 }
+
+a.auction-link {
+    text-decoration: none;
+    color: inherit;
+}
