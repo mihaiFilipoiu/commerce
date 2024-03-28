@@ -5,7 +5,7 @@ from django.shortcuts import render,get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from .models import User, AuctionListing
+from .models import User, AuctionListing, Watchlist
 from .forms import CreateListingForm
 
 def index(request):
@@ -67,24 +67,31 @@ def register(request):
         return render(request, "auctions/register.html")
     
 def create_listing(request):
-    if request.method == "POST":
+    if request.method == "POST": # POST
         form = CreateListingForm(request.POST)
         if form.is_valid():
             auction_listing = form.save(commit=False)
             auction_listing.auctioneer = request.user 
             auction_listing.save()
             return HttpResponseRedirect(reverse("index"))
-    else:
+    else: # GET
         return render(request, "auctions/create_listing.html", {
             "form": CreateListingForm
         })
 
 def listing_view(request, auction_id):
-    if request.method == "POST": # POST
-        pass
-    else: # GET
-        auction = AuctionListing.objects.get(pk=auction_id)
-        return render(request, "auctions/listing_page.html", {
-            "auction": auction
-        })
+    # GET
+    auction = AuctionListing.objects.get(pk=auction_id)
+    is_in_watchlist = Watchlist.objects.filter(watchlist_user=request.user, watchlist_auction=auction).exists()
+    return render(request, "auctions/listing_page.html", {
+        "auction": auction,
+        "is_in_watchlist": is_in_watchlist
+    })
 
+def toggle_watchlist(request, auction_id):
+    if request.method == "POST": # POST
+        auction = auction = AuctionListing.objects.get(pk=auction_id)
+        watchlist_item, created_now = Watchlist.objects.get_or_create(watchlist_user=request.user, watchlist_auction=auction)
+        if not created_now:
+            watchlist_item.delete()
+        return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))

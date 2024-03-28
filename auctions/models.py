@@ -39,3 +39,8 @@ class Comment(models.Model):
     comment_time = models.DateTimeField(auto_now_add=True)
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="comments")
 
+class Watchlist(models.Model):
+    id = id = models.BigAutoField(primary_key=True)
+    watchlist_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watchlist_items")
+    watchlist_auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="watchlist_listings")
+
