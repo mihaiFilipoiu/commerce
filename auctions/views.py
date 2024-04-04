@@ -66,7 +66,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-@login_required   
+@login_required
 def create_listing(request):
     if request.method == "POST": # POST
         form = CreateListingForm(request.POST)
@@ -83,12 +83,16 @@ def create_listing(request):
 def listing_view(request, auction_id):
     # GET
     auction = AuctionListing.objects.get(pk=auction_id)
-    is_in_watchlist = Watchlist.objects.filter(watchlist_user=request.user, watchlist_auction=auction).exists()
+    if request.user.is_authenticated:
+        is_in_watchlist = Watchlist.objects.filter(watchlist_user=request.user, watchlist_auction=auction).exists()
+    else:
+        is_in_watchlist = False
     return render(request, "auctions/listing_page.html", {
         "auction": auction,
         "is_in_watchlist": is_in_watchlist
     })
 
+@login_required
 def toggle_watchlist(request, auction_id):
     if request.method == "POST": # POST
         auction = auction = AuctionListing.objects.get(pk=auction_id)
@@ -96,7 +100,8 @@ def toggle_watchlist(request, auction_id):
         if not created_now:
             watchlist_item.delete()
         return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))
-    
+
+@login_required
 def watchlist_view(request):
     watchlist_items = Watchlist.objects.filter(watchlist_user=request.user).order_by("id")
     return render(request, "auctions/watchlist.html", {

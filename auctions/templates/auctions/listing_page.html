@@ -2,16 +2,18 @@
 
 {% block body %}
     <h2>Listing: {{ auction.title }}</h2>
-    {% if is_in_watchlist %}
-        <form action="{% url 'toggle_watchlist' auction.id %}" method="POST">
-            {% csrf_token %}
-            <input type="submit" value="Remove from Watchlist">
-        </form>
-    {% else %}
-        <form action="{% url 'toggle_watchlist' auction.id %}" method="POST">
-            {% csrf_token %}
-            <input type="submit" value="Add from Watchlist">
-        </form>
+    {% if user.is_authenticated %}
+        {% if is_in_watchlist %}
+            <form action="{% url 'toggle_watchlist' auction.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Remove from Watchlist">
+            </form>
+        {% else %}
+            <form action="{% url 'toggle_watchlist' auction.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Add from Watchlist">
+            </form>
+        {% endif %}
     {% endif %}
     <div>
         <p>{{ auction.description }}</p>
