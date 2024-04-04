@@ -1,0 +1,17 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Watchlist Listings</h2>
+
+    <div>
+        {% for watchlist_item in watchlist_items %}
+            <a href="{% url 'listing_view' watchlist_item.watchlist_auction.id%}" class="auction-link">
+                <div class="auction">
+                    <p>{{ watchlist_item.watchlist_auction.title }}</p>
+                    <p>Price: ${{ watchlist_item.watchlist_auction.starting_bid }}</p>
+                    <p>Created {{ watchlist_item.watchlist_auction.date_created }}</p>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

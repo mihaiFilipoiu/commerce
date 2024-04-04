@@ -95,3 +95,9 @@ def toggle_watchlist(request, auction_id):
         if not created_now:
             watchlist_item.delete()
         return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))
+    
+def watchlist_view(request):
+    watchlist_items = Watchlist.objects.filter(watchlist_user=request.user).order_by("id")
+    return render(request, "auctions/watchlist.html", {
+        "watchlist_items": watchlist_items
+    })
