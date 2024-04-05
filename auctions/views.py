@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Max
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render,get_object_or_404
@@ -10,7 +11,9 @@ from .models import User, AuctionListing, Watchlist, Bid
 from .forms import CreateListingForm, BidForm
 
 def index(request):
-    auctions = AuctionListing.objects.order_by("-date_created")
+    auctions = AuctionListing.objects.annotate(
+        highest_bid=Max("bids__bid")
+    ).order_by("-date_created")
     return render(request, "auctions/index.html", {
         "auctions": auctions
     })
