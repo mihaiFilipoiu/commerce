@@ -33,6 +33,9 @@ class Bid(models.Model):
     bid_time = models.DateTimeField(auto_now_add=True)
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="bids")
 
+    def __str__(self):
+        return f"\"{self.bid}\"$ by {self.bidder} on {self.auction.title}"
+    
 class Comment(models.Model):
     id = models.BigAutoField(primary_key=True)
     comment = models.CharField(max_length=255)
