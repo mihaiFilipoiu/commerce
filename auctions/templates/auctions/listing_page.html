@@ -17,7 +17,11 @@
     {% endif %}
     <div>
         <p>{{ auction.description }}</p>
-        <p>${{ auction.starting_bid }}</p>
+        {% if current_bid %}
+            <p>${{ current_bid }}</p>
+        {% else %}
+            <p>${{ auction.starting_bid }}</p>
+        {% endif %}
         <form action="{% url 'place_bid' auction.id %}" method="POST">
             {% csrf_token %}
             {{ form.as_p }}

@@ -88,10 +88,18 @@ def listing_view(request, auction_id):
         is_in_watchlist = Watchlist.objects.filter(watchlist_user=request.user, watchlist_auction=auction).exists()
     else:
         is_in_watchlist = False
+    
+    current_bid = auction.bids.order_by('-bid').first()
+    if current_bid:
+        current_bid_price = current_bid.bid
+    else:
+        current_bid_price = 0
+
     return render(request, "auctions/listing_page.html", {
         "auction": auction,
         "is_in_watchlist": is_in_watchlist,
-        "form": BidForm
+        "form": BidForm,
+        "current_bid": current_bid_price
     })
 
 @login_required
