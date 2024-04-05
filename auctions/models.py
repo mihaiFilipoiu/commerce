@@ -33,18 +33,6 @@ class Bid(models.Model):
     bid_time = models.DateTimeField(auto_now_add=True)
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="bids")
 
-    def clean(self):
-        if self.bid <= self.auction.starting_bid:
-            raise ValidationError("Bid is lower than the strating bid!")
-        
-        highest_bid = Bid.objects.filter(auction=self.auction).order_by("-bid").first()
-        if highest_bid and self.bid <= highest_bid.bid:
-            raise ValidationError("Bid is lower than the highest bid!")
-        
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
-        
 class Comment(models.Model):
     id = models.BigAutoField(primary_key=True)
     comment = models.CharField(max_length=255)

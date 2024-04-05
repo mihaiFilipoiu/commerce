@@ -1,12 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render,get_object_or_404
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
 
-from .models import User, AuctionListing, Watchlist
-from .forms import CreateListingForm
+from .models import User, AuctionListing, Watchlist, Bid
+from .forms import CreateListingForm, BidForm
 
 def index(request):
     auctions = AuctionListing.objects.order_by("-date_created")
@@ -89,7 +90,8 @@ def listing_view(request, auction_id):
         is_in_watchlist = False
     return render(request, "auctions/listing_page.html", {
         "auction": auction,
-        "is_in_watchlist": is_in_watchlist
+        "is_in_watchlist": is_in_watchlist,
+        "form": BidForm
     })
 
 @login_required
@@ -107,3 +109,26 @@ def watchlist_view(request):
     return render(request, "auctions/watchlist.html", {
         "watchlist_items": watchlist_items
     })
+
+@login_required
+def place_bid(request, auction_id):
+    auction = AuctionListing.objects.get(pk=auction_id)
+
+    if request.method == "POST": # POST
+        form = BidForm(request.POST)
+        if form.is_valid():
+            bid_amount = form.cleaned_data['bid']
+            if bid_amount >= auction.starting_bid:
+                highest_bid = auction.bids.order_by('-bid').first()
+                if not highest_bid or bid_amount > highest_bid.bid:
+                    bid = form.save(commit=False)
+                    bid.auction = auction
+                    bid.bidder = request.user
+                    bid.save()
+                    messages.success(request, "Bid placed succesfully.")
+                else:
+                    messages.error(request, "Your bid must be higher than the current highest bid.")
+            else:
+                messages.error(request, "Your bid must be higher or equal than the starting bid.")
+        
+        return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))

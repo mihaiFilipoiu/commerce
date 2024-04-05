@@ -18,7 +18,20 @@
     <div>
         <p>{{ auction.description }}</p>
         <p>${{ auction.starting_bid }}</p>
-
+        <form action="{% url 'place_bid' auction.id %}" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Place Bid">
+        </form>
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         <h5>Details:</h5>
         <ul>
             <li>Listed by {{ auction.auctioneer }}</li>
