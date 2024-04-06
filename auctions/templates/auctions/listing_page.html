@@ -43,4 +43,20 @@
             <li>Created {{ auction.date_created }}</li>
         </ul>
     </div>
+    <div>
+        <form action="{% url 'add_comment' auction.id %}" method="POST">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <input type="submit" value="Add Comment">
+        </form>
+        <div>
+            {% if comments %}
+                {% for comment in comments %}
+                    <div>
+                        <p>"{{ comment.comment }}" By {{ comment.commenter }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

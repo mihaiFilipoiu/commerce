@@ -7,8 +7,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render,get_object_or_404
 from django.urls import reverse
 
-from .models import User, AuctionListing, Watchlist, Bid
-from .forms import CreateListingForm, BidForm
+from .models import User, AuctionListing, Watchlist, Bid, Comment
+from .forms import CreateListingForm, BidForm, CommentForm
 
 def index(request):
     auctions = AuctionListing.objects.annotate(
@@ -102,6 +102,8 @@ def listing_view(request, auction_id):
         "auction": auction,
         "is_in_watchlist": is_in_watchlist,
         "form": BidForm,
+        "comment_form": CommentForm,
+        "comments": auction.comments.all().order_by('-comment_time'),
         "current_bid": current_bid_price
     })
 
@@ -143,3 +145,16 @@ def place_bid(request, auction_id):
                 messages.error(request, "Your bid must be higher or equal than the starting bid.")
         
         return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))
+    
+
+def add_comment(request, auction_id):
+    auction = AuctionListing.objects.get(pk=auction_id)
+
+    if request.method == "POST": # POST
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.auction = auction
+            comment.commenter = request.user
+            comment.save()
+            return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))
