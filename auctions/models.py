@@ -34,7 +34,7 @@ class Bid(models.Model):
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="bids")
 
     def __str__(self):
-        return f"\"{self.bid}\"$ by {self.bidder} on {self.auction.title}"
+        return f"{self.bid}$ by {self.bidder} on {self.auction.title}"
     
 class Comment(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -43,6 +43,9 @@ class Comment(models.Model):
     comment_time = models.DateTimeField(auto_now_add=True)
     auction = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="comments")
 
+    def __str__(self):
+        return f"{self.commenter} commented on {self.auction.title}"
+    
 class Watchlist(models.Model):
     id = id = models.BigAutoField(primary_key=True)
     watchlist_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watchlist_items")
