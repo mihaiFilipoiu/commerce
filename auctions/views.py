@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render,get_object_or_404
 from django.urls import reverse
 
-from .models import User, AuctionListing, Watchlist, Bid, Comment
+from .models import User, AuctionListing, Watchlist, Category, Bid, Comment
 from .forms import CreateListingForm, BidForm, CommentForm
 
 def index(request):
@@ -158,3 +158,12 @@ def add_comment(request, auction_id):
             comment.commenter = request.user
             comment.save()
             return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))
+        
+def category_view(request):
+    if request.method == "POST": # POST
+        pass
+    else:
+        categories = Category.objects.all()
+        return render(request, "auctions/categories.html", {
+            "categories": categories
+        })
