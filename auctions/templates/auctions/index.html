@@ -7,11 +7,11 @@
         {% for auction in auctions %}
             <a href="{% url 'listing_view' auction.id%}" class="auction-link">
                 <div class="auction">
-                    <div>
-                        {% if auction.image_url %}
+                    {% if auction.image_url %}
+                        <div>
                             <img src="{{ auction.image_url }}" alt="{{ auction.title }}" style="width: 10%; height: 10%;">
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
                     <div>
                         <p>{{ auction.title }}</p>
                         {% if auction.highest_bid %}

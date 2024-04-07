@@ -16,9 +16,11 @@
         {% endif %}
     {% endif %}
 
-    <div>
-        <img src="{{ auction.image_url }}" alt="{{ auction.title }}" style="width: 20%; height: 20%;">
-    </div>
+    {% if auction.image_url %}
+        <div>
+            <img src="{{ auction.image_url }}" alt="{{ auction.title }}" style="width: 20%; height: 20%;">
+        </div>
+    {% endif %}
     <div>
         <p>{{ auction.description }}</p>
         {% if current_bid %}
