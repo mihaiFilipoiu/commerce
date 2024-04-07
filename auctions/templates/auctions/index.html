@@ -7,13 +7,20 @@
         {% for auction in auctions %}
             <a href="{% url 'listing_view' auction.id%}" class="auction-link">
                 <div class="auction">
-                    <p>{{ auction.title }}</p>
-                    {% if auction.highest_bid %}
-                        <p>Current bid: ${{ auction.highest_bid }}</p>
-                    {% else %}
-                        <p>Starting bid: ${{ auction.starting_bid }}</p>
-                    {% endif %}
-                    <p>Created {{ auction.date_created }}</p>
+                    <div>
+                        {% if auction.image_url %}
+                            <img src="{{ auction.image_url }}" alt="{{ auction.title }}" style="width: 10%; height: 10%;">
+                        {% endif %}
+                    </div>
+                    <div>
+                        <p>{{ auction.title }}</p>
+                        {% if auction.highest_bid %}
+                            <p>Current bid: ${{ auction.highest_bid }}</p>
+                        {% else %}
+                            <p>Starting bid: ${{ auction.starting_bid }}</p>
+                        {% endif %}
+                        <p>Created {{ auction.date_created }}</p>
+                    </div>
                 </div>
             </a>
         {% endfor %}
