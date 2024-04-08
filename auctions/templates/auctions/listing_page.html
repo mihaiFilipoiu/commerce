@@ -28,7 +28,7 @@
         {% else %}
             <p>${{ auction.starting_bid }}</p>
         {% endif %}
-        {% if auction.status == 'Open' %}
+        {% if auction.status == 'Open' and request.user != auction.auctioneer %}
             <form action="{% url 'place_bid' auction.id %}" method="POST">
                 {% csrf_token %}
                 {{ form.as_p }}
