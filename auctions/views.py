@@ -146,7 +146,7 @@ def place_bid(request, auction_id):
         
         return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))
     
-
+@login_required
 def add_comment(request, auction_id):
     auction = AuctionListing.objects.get(pk=auction_id)
 
@@ -170,7 +170,7 @@ def category_page(request, category_id):
     auctions = AuctionListing.objects.filter(category=category).annotate(
         highest_bid=Max("bids__bid")
     ).order_by("-date_created")
-    
+
     return render(request, "auctions/category.html", {
         "category": category,
         "auctions": auctions
