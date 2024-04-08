@@ -9,17 +9,22 @@
                 <div class="auction">
                     {% if auction.image_url %}
                         <div>
-                            <img src="{{ auction.image_url }}" alt="{{ auction.title }}" style="width: 10%; height: 10%;">
+                            <img src="{{ auction.image_url }}" alt="{{ auction.title }}" style="width: 150px; height: 150px">
                         </div>
                     {% endif %}
-                    <div>
-                        <p>{{ auction.title }}</p>
+                    <div class="auction-info">
+                        <strong>{{ auction.title }}</strong>
                         {% if auction.highest_bid %}
-                            <p>Current bid: ${{ auction.highest_bid }}</p>
+                            <p style="margin: 0;">Current bid: ${{ auction.highest_bid }}</p>
                         {% else %}
-                            <p>Starting bid: ${{ auction.starting_bid }}</p>
+                            <p style="margin: 0;">Starting bid: ${{ auction.starting_bid }}</p>
                         {% endif %}
-                        <p>Created {{ auction.date_created }}</p>
+                        {% if auction.status == 'Open' %}
+                            <p>Status: {{ auction.status }} 🟢</p>
+                        {% else %}
+                            <p>Status: {{ auction.status }} 🔴</p>
+                        {% endif %}
+                        <p style="font-size: 14px; color:gray;">Created {{ auction.date_created }}</p>
                     </div>
                 </div>
             </a>

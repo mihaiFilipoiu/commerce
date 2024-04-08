@@ -5,13 +5,22 @@
 
     <div>
         {% for watchlist_item in watchlist_items %}
-            <a href="{% url 'listing_view' watchlist_item.watchlist_auction.id%}" class="auction-link">
-                <div class="auction">
-                    <p>{{ watchlist_item.watchlist_auction.title }}</p>
-                    <p>Price: ${{ watchlist_item.watchlist_auction.starting_bid }}</p>
-                    <p>Created {{ watchlist_item.watchlist_auction.date_created }}</p>
+        <div class="auction">
+            {% if watchlist_item.watchlist_auction.image_url %}
+                <div>
+                    <img src="{{ watchlist_item.watchlist_auction.image_url }}" alt="{{ watchlist_item.watchlist_auction.title }}" style="width: 150px; height: 150px">
                 </div>
-            </a>
+            {% endif %}
+            <div class="auction-info">
+                <strong>{{ watchlist_item.watchlist_auction.title }}</strong>
+                {% if watchlist_item.watchlist_auction.status == 'Open' %}
+                    <p>Status: {{ watchlist_item.watchlist_auction.status }} 🟢</p>
+                {% else %}
+                    <p>Status: {{ watchlist_item.watchlist_auction.status }} 🔴</p>
+                {% endif %}
+                <p style="font-size: 14px; color:gray;">Created {{ watchlist_item.watchlist_auction.date_created }}</p>
+            </div>
+        </div>
         {% endfor %}
     </div>
 {% endblock %}
