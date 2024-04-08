@@ -160,10 +160,18 @@ def add_comment(request, auction_id):
             return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))
         
 def category_view(request):
-    if request.method == "POST": # POST
-        pass
-    else:
-        categories = Category.objects.all()
-        return render(request, "auctions/categories.html", {
-            "categories": categories
-        })
+    categories = Category.objects.all()
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
+
+def category_page(request, category_id):
+    category = Category.objects.get(pk=category_id)
+    auctions = AuctionListing.objects.filter(category=category).annotate(
+        highest_bid=Max("bids__bid")
+    ).order_by("-date_created")
+    
+    return render(request, "auctions/category.html", {
+        "category": category,
+        "auctions": auctions
+    })

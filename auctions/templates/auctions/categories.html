@@ -6,12 +6,14 @@
     <div>
         {% for category in categories %}
             <div>
-                <div>
-                    <img src="{{ category.image_url }}" alt="{{ category.title }}" style="width: 10%; height: 10%;">
-                </div>
-                <div>
-                    <p>{{ category.name }}</p>
-                </div>
+                <a href="{% url 'category_page' category.id %}">
+                    <div>
+                        <img src="{{ category.image_url }}" alt="{{ category.title }}" style="width: 10%; height: 10%;">
+                    </div>
+                    <div>
+                        <p>{{ category.name }}</p>
+                    </div>
+                </a>
             </div>
         {% endfor %}
     </div>
