@@ -2,6 +2,7 @@
 
 {% block body %}
     <h2>Listing: {{ auction.title }} [{{ auction.status }}]</h2>
+    <h5>Winner: {{ auction.winner }}</h5>
     {% if user.is_authenticated %}
         {% if is_in_watchlist %}
             <form action="{% url 'toggle_watchlist' auction.id %}" method="POST">
@@ -58,6 +59,15 @@
             {% csrf_token %}
             <input type="submit" value="Close Listing">
         </form>
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
     {% endif %}
     <div>

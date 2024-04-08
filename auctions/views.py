@@ -176,12 +176,18 @@ def category_page(request, category_id):
         "auctions": auctions
     })
 
+@login_required
 def close_listing(request, auction_id):
     auction = AuctionListing.objects.get(pk=auction_id)
 
     if request.method == "POST": # POST
         if request.user == auction.auctioneer:
-            auction.status = "Closed"
-            auction.save()
-            return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))
-
+            highest_bid = Bid.objects.filter(auction=auction).aggregate(Max("bid")).get("bid__max")
+            if highest_bid:
+                auction.winner = Bid.objects.get(auction=auction, bid=highest_bid).bidder
+                auction.status = "Closed"
+                auction.save()
+                return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))
+            else:
+                messages.error(request, "No bidders yet.")
+                return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))
