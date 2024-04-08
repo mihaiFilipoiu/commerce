@@ -23,7 +23,7 @@ class AuctionListing(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     image_url = models.URLField(blank=True, null=True)
     status = models.CharField(max_length=8, default="Open")
-    winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="wins")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="auctions")
 
     def __str__(self):
