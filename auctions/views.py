@@ -175,3 +175,13 @@ def category_page(request, category_id):
         "category": category,
         "auctions": auctions
     })
+
+def close_listing(request, auction_id):
+    auction = AuctionListing.objects.get(pk=auction_id)
+
+    if request.method == "POST": # POST
+        if request.user == auction.auctioneer:
+            auction.status = "Closed"
+            auction.save()
+            return HttpResponseRedirect(reverse('listing_view', args=[auction_id]))
+

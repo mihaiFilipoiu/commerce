@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Listing: {{ auction.title }}</h2>
+    <h2>Listing: {{ auction.title }} [{{ auction.status }}]</h2>
     {% if user.is_authenticated %}
         {% if is_in_watchlist %}
             <form action="{% url 'toggle_watchlist' auction.id %}" method="POST">
@@ -28,27 +28,38 @@
         {% else %}
             <p>${{ auction.starting_bid }}</p>
         {% endif %}
-        <form action="{% url 'place_bid' auction.id %}" method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Place Bid">
-        </form>
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                        {{ message }}
-                    </li>
-                {% endfor %}
-            </ul>
+        {% if auction.status == 'Open' %}
+            <form action="{% url 'place_bid' auction.id %}" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Place Bid">
+            </form>
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                            {{ message }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         {% endif %}
         <h5>Details:</h5>
         <ul>
-            <li>Listed by {{ auction.auctioneer }}</li>
+            <li>Listing Status: {{ auction.status }}</li>
             <li>Category: {{ auction.category }}</li>
+            <li>Listed by {{ auction.auctioneer }}</li>
             <li>Created {{ auction.date_created }}</li>
         </ul>
     </div>
+    {% if request.user == auction.auctioneer and auction.status == 'Open' %}
+    <div>
+        <form action="{% url 'close_listing' auction.id%}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Close Listing">
+        </form>
+    </div>
+    {% endif %}
     <div>
         <form action="{% url 'add_comment' auction.id %}" method="POST">
             {% csrf_token %}

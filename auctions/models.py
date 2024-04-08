@@ -22,7 +22,7 @@ class AuctionListing(models.Model):
     starting_bid = models.IntegerField()
     date_created = models.DateTimeField(auto_now_add=True)
     image_url = models.URLField(blank=True, null=True)
-    status = models.CharField(max_length=8, default="open")
+    status = models.CharField(max_length=8, default="Open")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="auctions")
 
     def __str__(self):
