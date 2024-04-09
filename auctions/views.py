@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.db.models import Max
+from django.db.models import Max, Count
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render,get_object_or_404
@@ -92,6 +92,8 @@ def listing_view(request, auction_id):
     else:
         is_in_watchlist = False
     
+    total_bids = Bid.objects.filter(auction=auction).aggregate(total_bids=Count('id'))["total_bids"]
+
     current_bid = auction.bids.order_by('-bid').first()
     if current_bid:
         current_bid_price = current_bid.bid
@@ -104,6 +106,7 @@ def listing_view(request, auction_id):
         "form": BidForm,
         "comment_form": CommentForm,
         "comments": auction.comments.all().order_by('-comment_time'),
+        "total_bids": total_bids,
         "current_bid": current_bid_price
     })
 

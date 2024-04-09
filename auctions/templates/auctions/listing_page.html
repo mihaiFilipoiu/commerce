@@ -35,7 +35,10 @@
             <form class="form" action="{% url 'place_bid' auction.id %}" method="POST">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input class="submit-btn" type="submit" value="Place Bid">
+                <div style="display: flex;">
+                    <input class="submit-btn" type="submit" value="Place Bid">
+                    <p style="margin: 5px;">{{ total_bids }} bid(s) so far.</p>
+                </div>
             </form>
             {% if messages %}
                 <ul>
