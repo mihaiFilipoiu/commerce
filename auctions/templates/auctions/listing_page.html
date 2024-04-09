@@ -2,7 +2,9 @@
 
 {% block body %}
     <h2>Listing: {{ auction.title }} [{{ auction.status }}]</h2>
-    <h5>Winner: {{ auction.winner }}</h5>
+    {% if auction.winner %}
+        <h5>Winner: {{ auction.winner }}</h5>
+    {% endif %}
     {% if user.is_authenticated %}
         {% if is_in_watchlist %}
             <form action="{% url 'toggle_watchlist' auction.id %}" method="POST">
