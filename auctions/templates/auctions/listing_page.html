@@ -9,12 +9,12 @@
         {% if is_in_watchlist %}
             <form action="{% url 'toggle_watchlist' auction.id %}" method="POST">
                 {% csrf_token %}
-                <input type="submit" value="Remove from Watchlist">
+                <input class="submit-btn" type="submit" value="Remove from Watchlist">
             </form>
         {% else %}
             <form action="{% url 'toggle_watchlist' auction.id %}" method="POST">
                 {% csrf_token %}
-                <input type="submit" value="Add from Watchlist">
+                <input class="submit-btn" type="submit" value="Add from Watchlist">
             </form>
         {% endif %}
     {% endif %}
@@ -27,15 +27,15 @@
     <div>
         <p>{{ auction.description }}</p>
         {% if current_bid %}
-            <p>${{ current_bid }}</p>
+            <p class="price-tag">${{ current_bid }}</p>
         {% else %}
-            <p>${{ auction.starting_bid }}</p>
+            <p class="price-tag">${{ auction.starting_bid }}</p>
         {% endif %}
         {% if auction.status == 'Open' and request.user != auction.auctioneer %}
-            <form action="{% url 'place_bid' auction.id %}" method="POST">
+            <form class="form" action="{% url 'place_bid' auction.id %}" method="POST">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="submit" value="Place Bid">
+                <input class="submit-btn" type="submit" value="Place Bid">
             </form>
             {% if messages %}
                 <ul>
@@ -47,7 +47,7 @@
                 </ul>
             {% endif %}
         {% endif %}
-        <h5>Details:</h5>
+        <h5 style="padding-top: 10px;">Details:</h5>
         <ul>
             <li>Listing Status: {{ auction.status }}</li>
             <li>Category: {{ auction.category }}</li>
@@ -59,7 +59,7 @@
     <div>
         <form action="{% url 'close_listing' auction.id%}" method="POST">
             {% csrf_token %}
-            <input type="submit" value="Close Listing">
+            <input class="submit-btn" type="submit" value="Close Listing">
         </form>
         {% if messages %}
             <ul>
@@ -73,19 +73,21 @@
     </div>
     {% endif %}
     <div>
-        <form action="{% url 'add_comment' auction.id %}" method="POST">
+        <form class="form" action="{% url 'add_comment' auction.id %}" method="POST">
             {% csrf_token %}
             {{ comment_form.as_p }}
-            <input type="submit" value="Add Comment">
+            <input class="submit-btn" type="submit" value="Add Comment">
         </form>
-        <div>
-            {% if comments %}
+        {% if comments %}
+            <div class="comment-section">
                 {% for comment in comments %}
-                    <div>
-                        <p>"{{ comment.comment }}" By {{ comment.commenter }}</p>
+                    <div class="comment">
+                        <div class="commenter">{{ comment.commenter}}</div>
+                        <div class="comment-text">{{ comment.comment }}</div>
+                        <div class="timestamp">{{ comment.comment_time}}</div>
                     </div>
                 {% endfor %}
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

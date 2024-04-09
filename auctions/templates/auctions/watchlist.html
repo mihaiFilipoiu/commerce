@@ -5,22 +5,29 @@
 
     <div>
         {% for watchlist_item in watchlist_items %}
-        <div class="auction">
-            {% if watchlist_item.watchlist_auction.image_url %}
-                <div>
-                    <img src="{{ watchlist_item.watchlist_auction.image_url }}" alt="{{ watchlist_item.watchlist_auction.title }}" style="width: 150px; height: 150px">
-                </div>
-            {% endif %}
-            <div class="auction-info">
-                <strong>{{ watchlist_item.watchlist_auction.title }}</strong>
-                {% if watchlist_item.watchlist_auction.status == 'Open' %}
-                    <p>Status: {{ watchlist_item.watchlist_auction.status }} 🟢</p>
-                {% else %}
-                    <p>Status: {{ watchlist_item.watchlist_auction.status }} 🔴</p>
+        <a href="{% url 'listing_view' watchlist_item.watchlist_auction.id %}" class="auction-link">
+            <div class="auction">
+                {% if watchlist_item.watchlist_auction.image_url %}
+                    <div>
+                        <img src="{{ watchlist_item.watchlist_auction.image_url }}" alt="{{ watchlist_item.watchlist_auction.title }}" style="width: 150px; height: 150px">
+                    </div>
                 {% endif %}
-                <p style="font-size: 14px; color:gray;">Created {{ watchlist_item.watchlist_auction.date_created }}</p>
+                <div class="auction-info">
+                    <strong>{{ watchlist_item.watchlist_auction.title }}</strong>
+                    {% if watchlist_item.watchlist_auction.highest_bid %}
+                            <p style="margin: 0;">Current bid: ${{ watchlist_item.watchlist_auction.highest_bid }}</p>
+                        {% else %}
+                            <p style="margin: 0;">Starting bid: ${{ watchlist_item.watchlist_auction.starting_bid }}</p>
+                        {% endif %}
+                    {% if watchlist_item.watchlist_auction.status == 'Open' %}
+                        <p>Status: {{ watchlist_item.watchlist_auction.status }} 🟢</p>
+                    {% else %}
+                        <p>Status: {{ watchlist_item.watchlist_auction.status }} 🔴</p>
+                    {% endif %}
+                    <p style="font-size: 14px; color:gray;">Created {{ watchlist_item.watchlist_auction.date_created }}</p>
+                </div>
             </div>
-        </div>
+        </a>
         {% endfor %}
     </div>
 {% endblock %}

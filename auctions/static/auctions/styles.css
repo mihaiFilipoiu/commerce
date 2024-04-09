@@ -8,6 +8,7 @@ body {
     margin-bottom: 10px;
     display: flex;
     border-radius: 1rem;
+    
 }
 
 .auction:hover {
@@ -23,6 +24,13 @@ a.auction-link {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+}
+
+.category {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0px;
+    margin-bottom: 5px;
 }
 
 .category-text {
@@ -58,14 +66,49 @@ a.auction-link {
 }
 
 .submit-btn {
-    background-color: #a1a7ad; /* Blue color for submit button */
-    color: #fff; /* White text color */
-    padding: 10px 20px; /* Add padding for better appearance */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Add rounded corners */
+    background-color: #a1a7ad; 
+    color: #fff; 
+    padding: 5px 10px; 
+    border: none; 
+    border-radius: 5px;
+    margin-bottom: 10px;
     cursor: pointer;
 }
 
 .submit-btn:hover {
     background-color: #61778d;
 }
+
+.price-tag {
+    display: block; 
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.comment-section {
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.comment {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.comment .commenter {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.comment .comment-text {
+    color: #333;
+}
+
+.comment .timestamp {
+    font-size: 12px;
+    color: #666;
+}
+
+

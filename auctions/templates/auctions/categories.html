@@ -5,16 +5,16 @@
 
     <div class="categories">
         {% for category in categories %}
-            <a href="{% url 'category_page' category.id %}">
-                <div class="category">
+            <div class="category">
+                <a href="{% url 'category_page' category.id %}">
                     <div>
                         <img src="{{ category.image_url }}" alt="{{ category.title }}" style="width: 200px; height: 200px;">
                     </div>
                     <div class="category-text">
                         <p>{{ category.name }}</p>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}
